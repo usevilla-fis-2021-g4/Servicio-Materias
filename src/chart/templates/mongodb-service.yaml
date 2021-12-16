@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: mongodb
   labels:
-    {{- include "backendmaterias.labels" . | nindent 4 }}
+    {{- include "materias.labels" . | nindent 4 }}
     app.kubernetes.io/component: mongodb
 spec:
   type: ClusterIP
