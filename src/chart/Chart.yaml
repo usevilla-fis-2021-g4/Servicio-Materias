@@ -1,6 +1,6 @@
 apiVersion: v2
-name: MS-Materia
-description: Backend for Materias
+name: backendmaterias
+description: Backend para Materias del proyecto de FIS
 type: application
-version: 0.1.1
+version: 0.1.0
 appVersion: "1.0.0"
