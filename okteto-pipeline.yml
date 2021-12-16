@@ -1,3 +1,4 @@
 deploy:
- - okteto build -t okteto.dev/api:4{OKTETO_GIT_COMMIT} .
+ - okteto build -t okteto.dev/api:${OKTETO_GIT_COMMIT} .
  - helm upgrade --install backendmaterias chart --set tag=${OKTETO_GIT-COMMIT}
+ - okteto stack deploy -f mongodb-compose.yml --wait
