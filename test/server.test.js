@@ -1,6 +1,7 @@
 const app = require('../src/appmateria.js');
 const Materia = require('../src/models/materia.js');
 const request = require('supertest');
+const ApiKey = require('../apikeys.js');
 
 
 
@@ -33,11 +34,20 @@ describe("Materias API", () => {
             area: "2"
           },
         ];
+        const user = {
+          user: "TestMat",
+        }  
   
         dbFind = jest.spyOn(Materia, "find");
         dbFind.mockImplementation((query, callback) => {
           callback(null, materias);
         });
+
+        auth = jest.spyOn(ApiKey, "findOne");
+        auth.mockImplementation((query, callback) => {
+            callback(null, new ApiKey(user));
+        });
+
       });
   
       it("should return all materias", () => {
@@ -122,9 +132,13 @@ describe("Materias API", () => {
           area: "123"
         };
         let dbInsert;
+        
 
+        
         beforeEach(() => {
-            dbInsert = jest.spyOn(Materia, "create");
+          
+          dbInsert = jest.spyOn(Materia, "create");
+          
         });
 
         it('Should add a new contact if everything is fine', () => {
@@ -132,7 +146,7 @@ describe("Materias API", () => {
                 callback(false);
             });
 
-            return request(app).post('/apimaterias/v1/materias').send(materia).then((response) => {
+            return request(app).post('/apimaterias/v1/materias').set('apikey', '1').send(materia).then((response) => {
                 expect(response.statusCode).toBe(201);
             });
         });
@@ -142,7 +156,7 @@ describe("Materias API", () => {
                 callback(true);
             });
 
-            return request(app).post('/apimaterias/v1/materias').send(materia).then((response) => {
+            return request(app).post('/apimaterias/v1/materias').set('apikey', '1').send(materia).then((response) => {
                 expect(response.statusCode).toBe(500);
             });
         });
@@ -157,10 +171,12 @@ describe("Materias API", () => {
     };
 
     beforeAll(() => {
+
       dbFindOneAndUpdate = jest.spyOn(Materia, "findOneAndUpdate");
       dbFindOneAndUpdate.mockImplementation((r, data, callback) => {
         callback(null, materia);
       });
+      
     });
 
     it("should update a materia descripcion by id", () => {
@@ -174,6 +190,7 @@ describe("Materias API", () => {
       // Act
       return request(app)
         .put('/apimaterias/v1/materias/619e98f2ac8738570c90a207')
+        .set('apikey', '1')
         .send(send_data_to_update)
         .then((response) => {
           // Assert
@@ -205,6 +222,7 @@ describe("Materias API", () => {
       });
       return request(app)
         .delete("/apimaterias/v1/materias/619e98f2ac8738570c90a208")
+        .set('apikey','1')
         .then((response) => {
           expect(response.statusCode).toBe(200);
           expect(dbDelete).toBeCalledWith(
