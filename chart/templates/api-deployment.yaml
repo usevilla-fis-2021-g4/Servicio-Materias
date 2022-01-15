@@ -1,37 +1,45 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: api
+  name: apimaterias
   labels:
     {{- include "materias.labels" . | nindent 4 }}
-    app.kubernetes.io/component: api
+    app.kubernetes.io/component: apimaterias
 spec:
-  replicas: {{ .Values.api.replicaCount }}
+  replicas: {{ .Values.apimaterias.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: api
+      app.kubernetes.io/name: apimaterias
       app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: api
+        app.kubernetes.io/name: apimaterias
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
       terminationGracePeriodSeconds: 0
       containers:
-        - name: api
-          image: {{ .Values.api.image }}:{{ .Values.tag }}
+        - name: apimaterias
+          image: {{ .Values.apimaterias.image }}:{{ .Values.tag }}
+          env:
+            - name: MAT_MONGO_URL
+              valueFrom:
+                secretKeyRef:
+                  name: mongomateriasdb
+                  key: mongo_url
           ports:
             - name: http
-              containerPort: 1600
+              containerPort: 2999
               protocol: TCP
-          readinessProbe:
+          readinessProbe: 
+            initialDelaySeconds: 10
             periodSeconds: 5
             httpGet:
-              path: /api/v1/healthz
-              port: 1600
+              path: /apimaterias/v1/healthz
+              port: 2999
           livenessProbe:
+            initialDelaySeconds: 10
             periodSeconds: 5
             httpGet:
-              path: /api/v1/healthz
-              port: 1600
+              path: /apimaterias/v1/healthz
+              port: 2999

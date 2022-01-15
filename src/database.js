@@ -1,12 +1,12 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+require('dotenv').config();
+//const DB_URL = process.env.MAT_MONGO_URL || mongodb://mongo/test;
+const DB_URL = process.env.MAT_MONGO_URL || "mongodb://mongo/test";
 
-//const URI = "mongodb://localhost:27017/materiasDB";
-const URI = "mongodb://mongodb:27017";
+const dbConnect = function () {
+  const db = mongoose.connection;
+  db.on("error", console.error.bind(console, "connection error: "));
+  return mongoose.connect(DB_URL, { useNewUrlParser: true });
+};
 
-mongoose.connect(URI);
-
-const conection = mongoose.connection;
-
-conection.once('open', () =>{
-    console.log('DB Up');
-});
+module.exports = dbConnect;
