@@ -1,7 +1,7 @@
 tag: dev
 
-api:
+apimaterias:
   replicaCount: 1
-  image: okteto.dev/api
+  image: okteto.dev/apimaterias
 
 mongoUrl: mongodb://mongo/test

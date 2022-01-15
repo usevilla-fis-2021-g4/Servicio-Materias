@@ -8,9 +8,10 @@
     "url": "https://github.com/usevilla-fis-2021-g4/Servicio-Materias.git"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "dev": "nodemon scr/index.js",
-    "start": "node src/index.js"
+    "start": "node src/index.js",
+    "integration": "jest -c jest.integration.config.js"
   },
   "keywords": [],
   "author": "Laura Vargas y Miguel Diaz",
