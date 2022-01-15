@@ -1,13 +1,26 @@
-const {Schema, model} = require ('mongoose');
+const mongoose = require('mongoose');
 
-const MateriasSchema = new Schema({
-    nombre: {type: String},
-    descripcion: {type: String},
-    area: {type: String}
-},{
-    timestamps: true
-
+const MateriasSchema = new mongoose.Schema({
+    nombre: {
+        type: String,
+        required: true
+    },
+    descripcion: {
+        type: String,
+        required: true
+    },
+    area: {
+        type: String,
+        required: true
+    },
 
 });
 
-module.exports = model('Materia', MateriasSchema);
+MateriasSchema.methods.limpiar = function(){
+    //return this;
+    return {_id: this._id, nombre: this.nombre, descripcion: this.descripcion, area: this.area};
+}
+
+const Materia = mongoose.model('Materia', MateriasSchema);
+
+module.exports = Materia;
