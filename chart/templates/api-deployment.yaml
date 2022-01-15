@@ -21,12 +21,6 @@ spec:
       containers:
         - name: apimaterias
           image: {{ .Values.apimaterias.image }}:{{ .Values.tag }}
-          env:
-            - name: MAT_MONGO_URL
-              valueFrom:
-                secretKeyRef:
-                  name: mongomateriasdb
-                  key: mongo_url
           ports:
             - name: http
               containerPort: 2999
